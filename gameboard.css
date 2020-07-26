@@ -1,0 +1,233 @@
+.game-container{
+    display:flex;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(-100vh);
+}
+
+.container-gameboard{
+    display:flex;
+    flex-direction: column;
+
+}
+
+.option-container{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.row-boardgame {
+    display: flex;
+    flex:1;
+    margin-top: 5px;
+    align-self: stretch;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.option-button{
+    background-color:  rgba(0, 0, 0, 0.5);
+    color: white;
+    transition: all 0.2s ease-in;
+    border-radius: 10px;
+    border:none;
+    outline: none;
+    cursor: pointer;
+    width: 20vw;
+    flex:1;
+    font-size: 1.2rem;
+    padding: 12px;
+    margin: 2px 8px;
+}
+
+.question-container{
+    flex:1;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    min-height:50px ;
+}
+
+#question-content {
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    padding: 20px;
+}
+
+.question-title{
+    flex:1;
+    display: flex;
+    color: white;
+    font-size: 3rem;
+    font-weight: normal;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.option-button:hover{
+    box-shadow: 2px 2px #62ff57;
+    border-bottom-width: 2px;
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: translateY(-2px);
+}
+
+#question_index {
+    font-size: 1.6rem;
+    color: orange;
+    text-align: center;
+}
+
+#score {
+    font-size: 1.6rem;
+    color: dodgerblue;
+    text-align: center;
+}
+
+#question-content {
+    color: white;
+    text-align: center;
+
+}
+
+
+.alternative_button{
+    background-color:  rgba(100, 224, 75, 0.5);;
+    color: white;
+    transition: all 0.2s ease-in;
+    border-radius: 10px;
+    border:none;
+    outline: none;
+    cursor: pointer;
+    height: 30px;
+    font-size: 1.2rem;
+}
+
+.alternative_button:hover{
+    transform: translateY(-2px);    
+    background-color:  rgba(100, 224, 75, 0.8);
+    box-shadow: 2px 2px white;
+}
+
+
+#hint-button{
+    background-color:  rgba(230, 227, 67, 0.5);
+}
+
+#detail-button{
+    background-color:  rgba(121, 32, 121, 0.5);
+}
+
+@keyframes visible{
+    from{
+        opacity: 0;
+        visibility: hidden;
+    }
+    to{
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+
+#details-container{
+    visibility: hidden;
+    position: absolute;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    text-transform: lowercase;
+    align-self: center;
+    flex:1;
+    width: 90%;
+    height: 80%;
+    flex-direction: column;
+    transform: rotateY(-180deg);
+    bottom: 0;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+#detail_content{
+    overflow: scroll;
+    overflow-x: hidden; 
+    height: 60%;
+}
+
+.detail.show_detail{
+    animation: visible 0.5s 1.5s forwards;
+}
+
+
+.detail_header{
+    color: white;
+    font-weight: normal;
+    text-transform: capitalize;
+    text-align: center;
+    align-self: center;
+
+}
+
+.detail.show_detail::-webkit-scrollbar {
+    width: 1em;
+  }
+   
+.detail.show_detail::-webkit-scrollbar-track {
+box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.detail.show_detail::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+}
+
+
+#close-button{
+    border-radius: 50%;
+    width: 30px;
+    height:30px;
+    border:none;
+    background-color: rgba(255,255,255, 0.3);
+    outline:none;
+}
+
+#close-button:hover{
+    background-color: rgba(255,255,255, 0.7);
+    animation: float 0.5s ease-in-out;
+    animation-fill-mode: forwards;
+    
+}
+
+@keyframes float{
+    from{
+        transform: translateY(0px)
+    }
+    to{
+        transform: translateY(-2px)
+    }
+}
+
+.detail-wrapper {
+    position: absolute;
+    color: white;
+    background-color: rgb(18, 21, 27);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    display: flex;
+    visibility: hidden;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 6px 6px 10px rgb(0, 0, 0);
+}
+
+

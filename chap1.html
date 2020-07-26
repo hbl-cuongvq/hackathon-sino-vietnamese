@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nôm | Chap 1</title>
+  <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+  <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css" />
+  <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="gameboard.css">
+</head>
+
+<body class="container chap1">
+  <div class="background-overlay">
+    <blockquote contenteditable="false">
+      <q></q>
+    </blockquote>
+
+    <div class="guild-character">
+      <div class="conversation-guild">
+        <p id="typedtext-guild" class="conversation-text"></p>
+      </div>
+
+      <img src="./assets/character-guild.png" />
+    </div>
+
+    <div class="main-character">
+      <div class="conversation">
+        <p id="typedtext-main" class="conversation-text"></p>
+      </div>
+
+      <img src="./assets/main-character-2.png" />
+    </div>
+
+    <button class="next-button"
+      onclick="showBoardgame()"
+    >
+      <a href="#"></a>
+      <i class="arrow right"></i>
+      </a>
+    </button>
+
+
+    <div id='game-window' class='game-container'>
+      <div id="details-container" class="detail">
+        <button id="close-button" onclick="returnQuestion()">&#8249</button>
+        <h1 class="detail_header">Detail</h1>
+        <div id="detail_content" class="detail_content">
+
+        </div>
+      </div>
+      <h1 id="question_title" class="question-title">
+        勾 噲
+      </h1>
+      <p id="score" class="score"></p>
+      <p id="question_index" class="question_index"></p>
+      <div id="game-container" class="container-gameboard">
+      </div>
+
+    </div>
+  </div>
+
+  <script type="text/javascript" src="data.js"></script>
+  <script>
+    let lines = ['Chương 1']
+
+    let mainConversation = [
+      'Có vẻ thiết bị hoạt động ổn định. Kiểm tra lại một chút cho chắc chắn.',
+      '...Sao...Sao lại như vậy!!!',
+      'Không ngờ ta lại đến nhầm năm 1621 :<',
+      'Giờ biết làm sao đây :(( ....'
+    ]
+
+    let guildConversation = [
+      'Ngươi là ai ???',
+      'Tại sao y phục lại dị hợm như vậy.',
+    ]
+
+    function splitWords() {
+      let quote = document.querySelector("blockquote q");
+      quote.innerText.replace(/(<([^>]+)>)/ig, "");
+      quotewords = quote.innerText.split(" "),
+        wordCount = quotewords.length;
+      quote.innerHTML = "";
+      for (let i = 0; i < wordCount; i++) {
+        quote.innerHTML += "<span>" + quotewords[i] + "</span>";
+        if (i < quotewords.length - 1) {
+          quote.innerHTML += " ";
+        }
+      }
+      quotewords = document.querySelectorAll("blockquote q span");
+      fade(quotewords, quote);
+    }
+
+    function getRandom(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function fade(quotewords, quote) {
+      Array.prototype.forEach.call(quotewords, function (word) {
+        let animate = word.animate([{
+          opacity: 0,
+          filter: "blur(" + getRandom(2, 5) + "px)"
+        }, {
+          opacity: 1,
+          filter: "blur(0px)"
+        }, {
+          opacity: 0,
+          filter: "blur(" + getRandom(2, 5) + "px)"
+        }],
+          {
+            duration: 3000,
+            delay: getRandom(500, 1000),
+            fill: 'forwards'
+          }
+        )
+      })
+    }
+
+    function mainSay(conversation) {
+      // set up text to print, each item in array is new line
+      let iSpeed = 50; // time delay of print out
+      let iIndex = 0; // start printing array at this posision
+      let iArrLength = conversation[0].length; // the length of the text array
+      let iScrollAt = 4; // start scrolling up at this many lines
+
+      let iTextPos = 0; // initialise text position
+      let sContents = ''; // initialise contents letiable
+      let iRow; // initialise current row
+
+      function typewriter() {
+        sContents = ' ';
+        iRow = Math.max(0, iIndex - iScrollAt);
+        let destination = document.getElementById("typedtext-main");
+
+        while (iRow < iIndex) {
+          sContents += conversation[iRow++] + '<br />';
+        }
+        destination.innerHTML = sContents + conversation[iIndex].substring(0, iTextPos) + "_";
+        if (iTextPos++ == iArrLength) {
+          iTextPos = 0;
+          iIndex++;
+          if (iIndex != conversation.length) {
+            iArrLength = conversation[iIndex].length;
+            setTimeout(typewriter, 500);
+          }
+        } else {
+          setTimeout(typewriter, iSpeed);
+        }
+      }
+
+      typewriter()
+    }
+
+    function guildSay(conversation) {
+      // set up text to print, each item in array is new line
+      let iSpeed = 50; // time delay of print out
+      let iIndex = 0; // start printing array at this posision
+      let iArrLength = conversation[0].length; // the length of the text array
+      let iScrollAt = 4; // start scrolling up at this many lines
+
+      let iTextPos = 0; // initialise text position
+      let sContents = ''; // initialise contents letiable
+      let iRow; // initialise current row
+
+      function typewriter() {
+        sContents = ' ';
+        iRow = Math.max(0, iIndex - iScrollAt);
+        let destination = document.getElementById("typedtext-guild");
+
+        while (iRow < iIndex) {
+          sContents += conversation[iRow++] + '<br />';
+        }
+        destination.innerHTML = sContents + conversation[iIndex].substring(0, iTextPos) + "_";
+        if (iTextPos++ == iArrLength) {
+          iTextPos = 0;
+          iIndex++;
+          if (iIndex != conversation.length) {
+            iArrLength = conversation[iIndex].length;
+            setTimeout(typewriter, 500);
+          }
+        } else {
+          setTimeout(typewriter, iSpeed);
+        }
+      }
+
+      typewriter()
+    }
+
+
+    const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    async function setLineStory() {
+      let mainCharacter = document.querySelector(".main-character");
+      let guildCharater = document.querySelector(".guild-character");
+      mainCharacter.animate([{
+        opacity: 0,
+        right: '-23vw',
+      }], {
+        fill: "forwards"
+      })
+
+      guildCharater.animate([{
+        opacity: 0,
+        left: '-40vw',
+      }], {
+        fill: "forwards"
+      })
+
+      let quote = document.querySelector("blockquote q");
+      let intervalId = setInterval(() => {
+        quote.textContent = lines[0];
+        splitWords();
+        clearInterval(intervalId)
+      }, 4000)
+
+      await wait(9000)
+
+      // main apeare
+      mainCharacter.animate([{
+        opacity: 1,
+        right: '6vw',
+      }], {
+        duration: 2000,
+        fill: "forwards"
+      })
+      await wait(2000)
+
+      // main say
+      mainSay(mainConversation)
+      await wait(10000)
+
+      mainSay(['Haiizzzzzzzzzzzz...'])
+      await wait(3000)
+
+      // guild apeare
+      guildCharater.animate([{
+        opacity: 1,
+        left: '20vw',
+      }], {
+        duration: 2000,
+        fill: "forwards"
+      })
+
+      // guild say
+      mainSay([''])
+      guildSay(guildConversation)
+      await wait(4000)
+      guildSay(['Cả cái xe ngựa của ngươi nữa, ta chưa từng gặp qua bao giờ.',])
+      await wait(4000)
+
+      guildSay([''])
+      mainSay(['Thảo dân..........', 'Thảo dân là một thương nhân, lần đầu đến nơi đây', 'Ngài có biết chợ gần nhất ở chỗ nào không?', 'Thảo dân muốn đến đó bán chút đồ ^^'])
+      await wait(11000)
+
+      mainSay([''])
+      guildSay(['Ngươi đi thẳng khoảng 400 bước, rồi nhìn thấy nơi nào đề tên 助廊 thì vào',])
+      await wait(4000)
+
+      guildSay([''])
+      mainSay(['..................', 'Thưa ngài.........助廊 nghĩa là gì ạ?'])
+      await wait(4000)
+
+      mainSay([''])
+      guildSay(['Ngươi là thương nhân mà lại không biết chữ ư??? @@'])
+      await wait(4000)
+
+      guildSay([''])
+      mainSay(['.... :v Thưa ngài, gia đình Thảo dân làm nông đã mấy đời.', 'Tích cóp cố gắng nhiều năm mới được như ngày hôm nay.', 'Thảo dân mải mê làm ăn chưa có thời gian học chữ...'])
+      await wait(12000)
+
+      guildSay([''])
+      mainSay(['* Nghĩ thầm: Phù... tí nữa thì lộ cái cỗ máy @@ :<', 'Chữ nôm đã lâu như vậy sao mình biết được chứ :(( *'])
+      await wait(6000)
+
+      mainSay([''])
+      guildSay(['Thôi được rồi.', 'Ngươi vào đây, ta dạy ngươi vài chữ, rồi ngươi tự đi đến đó', 'Ngươi đồng ý không?'])
+      await wait(8000)
+
+      guildSay([''])
+      mainSay(['Thảo dân độ ơn ngài.', 'Mong ngài chỉ dạy thêm!!!'])
+      await wait(4000)
+
+      guildSay([''])
+      mainSay(['* Nghĩ thầm: Luckyyyyy !!! gặp ngay người tốttttttt :> *'])
+      await wait(4000)
+
+      // character disappere
+      mainCharacter.animate([{
+        opacity: 0,
+      }], {
+        duration: 2000,
+        fill: "forwards"
+      })
+
+      guildCharater.animate([{
+        opacity: 0,
+      }], {
+        duration: 2000,
+        fill: "forwards"
+      })
+      await wait(2000)
+
+      // show next button
+      let nextButton = document.querySelector(".next-button");
+      let blockquote = document.querySelector("blockquote");
+      blockquote.animate([{
+        width: '0px',
+        display: 'none',
+      }], {
+        fill: "forwards"
+      })
+      nextButton.animate([{
+        opacity: 1,
+      }], {
+        duration: 3000,
+        fill: "forwards"
+      })
+    }
+
+    setLineStory()
+
+
+    let questionIndex = 0;
+        let buttonData;
+        let score = 0;
+
+        function displayDetail() {
+          /// asasdadas
+          let detailWrapper = document.querySelector('.detail-wrapper')
+          detailWrapper.animate([{
+            visibility: 'visible',
+          }], {
+            fill:"forwards"
+          })
+        }
+
+
+        function returnQuestion() {
+            document.getElementById('game-window').classList.remove('show_detail');
+            document.getElementById('game-container').classList.remove('show_detail');
+            document.getElementById('question_title').classList.remove('show_detail');
+            document.getElementById('details-container').classList.remove('show_detail');
+            document.getElementById('question_index').classList.remove('show_detail');
+        }
+
+        function answerCheck() {
+
+            if (buttonData == data[questionIndex].answerIndex) {
+                questionIndex = (questionIndex + 1) % data.length;
+                // alert('correct');
+                score += 100;
+                loadQuestion(questionIndex)
+                document.getElementById('score').innerHTML = `Điểm: ${score}`
+            }
+            else {
+                alert('false');
+            }
+        }
+        function setButtonDataFunction(index) {
+            button_data = index;
+        }
+
+        getIndex = (index, self) => {
+            buttonData = index;
+            let buttonOption = document.getElementsByClassName('option-button');
+            for (i = 0; i < buttonOption.length; i++)
+                buttonOption[i].style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+            console.log(buttonData)
+            self.style.backgroundColor = "tomato";
+        }
+
+        function loadQuestion(index) {
+            document.getElementById('question_index').innerHTML = `
+                    ${index + 1}/${data.length} câu
+                `
+            if (data.length) {
+                let game_window = document.getElementById('game-container');
+                game_window.innerHTML = `
+                <div  class="question-container">
+                    <div class='detail-wrapper' onClick="hideDetail()">${data[index].description}</div>
+                    <p id='question-content'>${data[index] && data[index].questionContent}</p>
+                </div>
+                <div class='option-container'>
+                    <div class="row-boardgame">
+                        <button class="option-button" onClick="getIndex(0,this)" id="button1">${data[index] && data[index].answer[0]}</button>
+                        <button class="option-button" onClick="getIndex(1,this)" id="button2">${data[index] && data[index].answer[1]}</button>
+                    </div>
+                    <div class="row-boardgame">
+                        <button class="option-button" onClick="getIndex(2,this)" id="button3">${data[index] && data[index].answer[2]}</button>
+                        <button class="option-button" onClick="getIndex(3,this)"  id="button4">${data[index] && data[index].answer[3]}</button>
+                    </div>
+                    <div class="row-boardgame">
+                        <button id="detail-button" class="alternative_button" onClick="displayDetail()" >Giải thích</button>
+                        <button id="submit-button" class="alternative_button" onClick="answerCheck()" >Kiểm tra</button>
+                    </div>
+                </div>
+                    `
+            }
+        }
+
+        loadQuestion(questionIndex);
+
+
+        function showBoardgame() {
+          let boardgame = document.querySelector('.game-container')
+
+          boardgame.animate([{
+            transform: 'translateY(0vh)'
+          }], {
+            duration: 600,
+            fill:"forwards"
+          })
+
+          let nextbutton = document.querySelector('.next-button')
+          nextbutton.animate([{
+            opacity: 0
+          }], {
+            duration: 600,
+            fill:"forwards"
+          })
+        }
+
+        function hideDetail() {
+          let detailWrapper = document.querySelector('.detail-wrapper')
+          detailWrapper.animate([{
+            display: 'none',
+            visibility: 'hidden',
+          }], {
+            fill:"forwards"
+          })
+        }
+  </script>
+</body>
+
+</html>

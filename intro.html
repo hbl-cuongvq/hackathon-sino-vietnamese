@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nôm | Giới thiệu</title>
+  <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+  <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css" />
+  <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.1.0/gl-matrix.js"></script>
+</head>
+
+<body class="container">
+  <div class="intro">
+    <div class="background-overlay">
+      <!-- scene 1 -->
+      <div class="main-character">
+        <div class="conversation">
+          <p id="typedtext" class="conversation-text"></p>
+        </div>
+
+        <img src="./assets/main-character.png" />
+      </div>
+
+      <!-- scene 2 -->
+      <img class='scene2-bg' src="./assets/intro2-bg.jpg" />
+
+      <!-- scene 3 -->
+      <canvas id="canvas"></canvas>
+      <img class="travel-ship" src="./assets/travelShip.png" />
+    </div>
+  </div>
+  <script>
+    const travelShipFunc = () => {
+      let travelShip = document.querySelector(".travel-ship");
+
+      travelShip.animate([{
+        opacity: 1,
+        bottom: '0',
+      }], {
+        duration: 6000,
+        fill: "forwards",
+      })
+      travelShip.animate([
+        {
+          transform: 'translate(200px, -100px) scale(0.9) skew(-10deg)'
+        }], {
+        duration: 1000,
+        delay: 7000,
+        fill: "forwards",
+      })
+
+      travelShip.animate([{
+        transform: 'translate(600px, -150px) scale(0.6) skew(-20deg)'
+      }], {
+        duration: 1000,
+        delay: 8000,
+        fill: "forwards"
+      })
+
+      travelShip.animate([{
+        transform: 'translate(1000px, -200px) scale(0.4) skew(50deg)'
+      }], {
+        duration: 1000,
+        delay: 9000,
+        fill: "forwards"
+      })
+
+      travelShip.animate([{
+        transform: 'translate(590px, -310px) scale(0) skew(60deg)'
+      }], {
+        duration: 1000,
+        delay: 10000,
+        fill: "forwards"
+      })
+    }
+
+    let conversations = [
+      'Tàu du hành thời gian đã hoàn thành! Cần chạy thử nghiệm ngay!',
+      'Đích đến: toạ độ (2665656.45455, 454.698989)',
+      'Xác nhận... Khởi hành',
+    ]
+
+
+    // set up text to print, each item in array is new line
+    let iSpeed = 50; // time delay of print out
+    let iIndex = 0; // start printing array at this posision
+    let iArrLength = conversations[0].length; // the length of the text array
+    let iScrollAt = 4; // start scrolling up at this many lines
+
+    let iTextPos = 0; // initialise text position
+    let sContents = ''; // initialise contents letiable
+    let iRow; // initialise current row
+
+    function typewriter() {
+      sContents = ' ';
+      iRow = Math.max(0, iIndex - iScrollAt);
+      let destination = document.getElementById("typedtext");
+
+      while (iRow < iIndex) {
+        sContents += conversations[iRow++] + '<br />';
+      }
+      destination.innerHTML = sContents + conversations[iIndex].substring(0, iTextPos) + "_";
+      if (iTextPos++ == iArrLength) {
+        iTextPos = 0;
+        iIndex++;
+        if (iIndex != conversations.length) {
+          iArrLength = conversations[iIndex].length;
+          setTimeout("typewriter()", 500);
+        }
+      } else {
+        setTimeout("typewriter()", iSpeed);
+      }
+    }
+
+    const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    let timeLine = async () => {
+      // scene 1
+      await wait(3000)
+      typewriter()
+      await wait(10000)
+
+      // scene 2
+      let scene2Bg = document.querySelector(".scene2-bg");
+      scene2Bg.animate([{
+        opacity: 1
+      }], {
+        duration: 300,
+        fill: "forwards"
+      })
+
+      // scene 3
+      await wait(4000)
+      let travelSpace = document.querySelector("#canvas");
+      travelSpace.animate([{
+        opacity: 1
+      }], {
+        duration: 6000,
+        fill: "forwards"
+      })
+      travelShipFunc()
+
+      await wait(14000)
+      // end 
+      let body = document.querySelector(".intro");
+      body.animate([{
+        transform: 'scale(6)',
+      }], {
+        duration: 3000,
+        fill: 'forwards'
+      })
+      await wait(4000)
+      window.location.href="./chap1.html";
+    }
+
+    timeLine()
+  </script>
+  <script src="./js/travelTime.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nôm | Trang chủ</title>
+  <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css" />
+  <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting-cells.css" />
+  <script src="https://unpkg.com/splitting/dist/splitting.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body class="container index">
+  <div class="background-overlay">
+    <div class="night"></div>
+    <blockquote contenteditable="false">
+      <q></q>
+    </blockquote>
+
+    <button class="next-button">
+      <a href="./intro.html">
+        <i class="arrow right"></i>
+      </a>
+    </button>
+
+    <img
+      class="travel-ship-index"
+      src="./assets/travelShip.png"
+    />
+    <script>
+      let nightElement = document.querySelector(".night");
+      for (let i = 0; i < 20; i++) {
+        nightElement.innerHTML += "<div class='shooting_star'></div>"
+      }
+
+      let lines = [
+        'Hán Nôm là một di sản văn hóa phi vật thể vĩ đại của dân tộc Việt Nam ta',
+        'Với những giá trị không thể chối bỏ: Giá trị lịch sử tư tưởng giáo dục mỹ thuật...',
+        'Tuy nhiên...',
+        'Trong bối cảnh thế hệ trẻ ngày một ít quan tâm...',
+        'Rất có thể di sản Hán Nôm sẽ lụi tàn dần và chỉ còn trong ký ức của những người đi trước.',
+        'Đây là câu chuyện của chúng tôi...',
+      ]
+
+      function splitWords() {
+        let quote = document.querySelector("blockquote q");
+        quote.innerText.replace(/(<([^>]+)>)/ig, "");
+        quotewords = quote.innerText.split(" "),
+          wordCount = quotewords.length;
+        quote.innerHTML = "";
+        for (let i = 0; i < wordCount; i++) {
+          quote.innerHTML += "<span>" + quotewords[i] + "</span>";
+          if (i < quotewords.length - 1) {
+            quote.innerHTML += " ";
+          }
+        }
+        quotewords = document.querySelectorAll("blockquote q span");
+        fade(quotewords, quote);
+      }
+
+      function getRandom(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      function fade(quotewords, quote) {
+        Array.prototype.forEach.call(quotewords, function (word) {
+          let animate = word.animate([{
+            opacity: 0,
+            filter: "blur(" + getRandom(2, 5) + "px)"
+          }, {
+            opacity: 1,
+            filter: "blur(0px)"
+          }, {
+            opacity: 0,
+            filter: "blur(" + getRandom(2, 5) + "px)"
+          }],
+            {
+              duration: 3000,
+              delay: getRandom(500, 1000),
+              fill: 'forwards'
+            }
+          )
+        })
+      }
+
+      const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+
+      async function setLineStory() {
+        let i = 0
+        let quote = document.querySelector("blockquote q");
+        let intervalId = setInterval(() => {
+          quote.textContent = lines[i];
+          splitWords();
+          i++;
+
+          if (i === lines.length + 1) {
+            clearInterval(intervalId)
+
+            // animation next button
+            let nextButton = document.querySelector(".next-button");
+            nextButton.animate([{
+              opacity: 1,
+            }], {
+              duration: 1000,
+              fill: 'forwards'
+            })
+          }
+        }, 4000)
+      }
+
+      setLineStory()
+    </script>
+  </div>
+</body>
+
+</html>
